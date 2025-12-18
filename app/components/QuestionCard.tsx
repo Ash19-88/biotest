@@ -16,11 +16,11 @@ export default function QuestionCard({
   onAnswer
 }: QuestionCardProps) {
   const getOptionStyle = (index: number) => {
-    const baseStyle = "w-full p-4 text-left rounded-xl border-2 transition-all duration-300 flex items-center justify-between";
+    const baseStyle = "w-full p-3 sm:p-4 text-left rounded-lg sm:rounded-xl border-2 transition-all duration-300 flex items-center justify-between";
     
     if (selectedAnswer === null) {
       return {
-        className: `${baseStyle} cursor-pointer hover:scale-[1.02]`,
+        className: `${baseStyle} cursor-pointer hover:scale-[1.01] sm:hover:scale-[1.02]`,
         style: {
           background: 'white',
           borderColor: 'var(--color-gray-200)'
@@ -61,67 +61,30 @@ export default function QuestionCard({
     };
   };
 
-  const getLetterStyle = (index: number) => {
-    if (selectedAnswer === null) {
-      return {
-        background: 'var(--color-gray-200)',
-        color: 'var(--color-gray-700)'
-      };
-    }
-    
-    if (index === question.correctAnswer) {
-      return {
-        background: 'var(--color-green-500)',
-        color: 'white'
-      };
-    }
-    
-    if (index === selectedAnswer && index !== question.correctAnswer) {
-      return {
-        background: 'var(--color-red-500)',
-        color: 'white'
-      };
-    }
-    
-    return {
-      background: 'var(--color-gray-200)',
-      color: 'var(--color-gray-500)'
-    };
-  };
-
   return (
-    <div className="rounded-2xl p-6 md:p-8" style={{
+    <div className="rounded-lg sm:rounded-xl md:rounded-2xl p-4 sm:p-5 md:p-6" style={{
       background: 'white',
-      boxShadow: '0 10px 40px rgba(0, 0, 0, 0.1)'
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)'
     }}>
-      {/* Header */}
-      <div className="flex justify-between items-start mb-6">
-        <Badge type={question.category}>
+      {/* Header Responsive */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4 sm:mb-6">
+        <Badge type={question.category} className="text-xs sm:text-sm">
           {question.category === 'respiratorio' ? 'Sistema Respiratorio' : 'Sistema Circulatorio'}
         </Badge>
-        <div style={{
-          fontSize: '0.875rem',
-          color: 'var(--color-gray-500)'
-        }}>
+        <div className="text-xs sm:text-sm text-gray-500">
           Selecciona la respuesta correcta
         </div>
       </div>
 
-      {/* Question */}
-      <h2 style={{
-        fontSize: '1.875rem',
-        fontWeight: '700',
-        color: 'var(--color-gray-800)',
-        marginBottom: '2rem'
-      }}>
+      {/* Question Responsive */}
+      <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 md:mb-8 leading-tight">
         {question.question}
       </h2>
 
-      {/* Options */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      {/* Options Responsive */}
+      <div className="space-y-2 sm:space-y-3 md:space-y-4">
         {question.options.map((option, index) => {
           const optionStyle = getOptionStyle(index);
-          const letterStyle = getLetterStyle(index);
           
           return (
             <button
@@ -141,29 +104,43 @@ export default function QuestionCard({
                 }
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
                 <div style={{
-                  width: '2.5rem',
-                  height: '2.5rem',
+                  width: '1.75rem',
+                  height: '1.75rem',
+                  fontSize: '0.875rem',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderRadius: '50%',
                   fontWeight: '700',
-                  ...letterStyle
+                  background: selectedAnswer === null
+                    ? 'var(--color-gray-200)'
+                    : index === question.correctAnswer
+                    ? 'var(--color-green-500)'
+                    : index === selectedAnswer
+                    ? 'var(--color-red-500)'
+                    : 'var(--color-gray-200)',
+                  color: selectedAnswer === null
+                    ? 'var(--color-gray-700)'
+                    : index === question.correctAnswer || index === selectedAnswer
+                    ? 'white'
+                    : 'var(--color-gray-500)'
                 }}>
                   {String.fromCharCode(65 + index)}
                 </div>
-                <span style={{ fontSize: '1.125rem' }}>{option}</span>
+                <span className="text-sm sm:text-base md:text-lg text-left wrap-break-word flex-1">
+                  {option}
+                </span>
               </div>
               
               {selectedAnswer !== null && (
                 <>
                   {index === question.correctAnswer && (
-                    <FaCheckCircle style={{ color: 'var(--color-green-500)', fontSize: '1.5rem' }} />
+                    <FaCheckCircle className="text-green-500 text-lg sm:text-xl md:text-2xl ml-2" />
                   )}
                   {index === selectedAnswer && index !== question.correctAnswer && (
-                    <FaTimesCircle style={{ color: 'var(--color-red-500)', fontSize: '1.5rem' }} />
+                    <FaTimesCircle className="text-red-500 text-lg sm:text-xl md:text-2xl ml-2" />
                   )}
                 </>
               )}
@@ -172,23 +149,13 @@ export default function QuestionCard({
         })}
       </div>
 
-      {/* Explanation */}
+      {/* Explanation Responsive */}
       {selectedAnswer !== null && question.explanation && (
-        <div style={{
-          marginTop: '1.5rem',
-          padding: '1rem',
-          background: 'var(--color-blue-50)',
-          border: '1px solid var(--color-blue-200)',
-          borderRadius: '0.75rem'
-        }}>
-          <h4 style={{
-            fontWeight: '700',
-            color: 'var(--color-blue-800)',
-            marginBottom: '0.5rem'
-          }}>
+        <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg sm:rounded-xl">
+          <h4 className="font-bold text-blue-800 mb-1 sm:mb-2 text-sm sm:text-base">
             📚 Explicación
           </h4>
-          <p style={{ color: 'var(--color-gray-700)' }}>
+          <p className="text-gray-700 text-xs sm:text-sm md:text-base leading-relaxed">
             {question.explanation}
           </p>
         </div>

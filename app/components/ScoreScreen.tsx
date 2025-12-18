@@ -1,85 +1,58 @@
 'use client';
 
-import { FaTrophy, FaRedo, FaShareAlt } from 'react-icons/fa';
-import Button from '../ui/Button';
+import {  FaRedo } from 'react-icons/fa';
 import Link from 'next/link';
 
 interface ScoreScreenProps {
   score: number;
   total: number;
   onRestart: () => void;
+  title?: string;
 }
 
-export default function ScoreScreen({ score, total, onRestart }: ScoreScreenProps) {
+export default function ScoreScreen({ 
+  score, 
+  total, 
+  onRestart,
+  title = "Quiz Completado"
+}: ScoreScreenProps) {
   const percentage = Math.round((score / total) * 100);
 
   const getMessage = () => {
-    if (percentage >= 90) return "¡Excelente! 🎉 Eres un experto en biología.";
+    if (percentage >= 90) return "¡Excelente! 🎉 Dominas completamente el tema.";
     if (percentage >= 70) return "¡Muy bien! 👍 Tienes un buen conocimiento.";
     if (percentage >= 50) return "Bien, pero puedes mejorar. 📚";
     return "Necesitas repasar más. ¡Sigue estudiando! 💪";
   };
 
-  const shareScore = () => {
-    const text = `¡Acabo de completar el quiz de Sistemas del Cuerpo Humano con ${score}/${total} puntos! 🩺🧠`;
-    
-    if (navigator.share) {
-      navigator.share({
-        title: 'Mi puntuación en el Quiz de Biología',
-        text: text,
-        url: window.location.href
-      });
-    } else {
-      navigator.clipboard.writeText(text);
-      alert('¡Puntuación copiada al portapapeles! 🎯');
-    }
-  };
-
   return (
-    <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
-      {/* Trophy Icon */}
-      <div className="inline-flex p-4 bg-linear-to-r from-yellow-400 to-orange-500 rounded-full mb-4">
-        <FaTrophy className="text-white text-5xl" />
+    <div className="bg-white rounded-xl sm:rounded-2xl md:rounded-3xl shadow-lg sm:shadow-xl md:shadow-2xl p-4 sm:p-6 md:p-8 w-full max-w-xs sm:max-w-sm md:max-w-md mx-2 text-center">
+      {/* Title Responsive */}
+      <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+        {title}
+      </h1>
+      <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
+        Aquí están tus resultados
+      </p>
+
+      {/* Score Responsive */}
+      <div className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6">
+        <span className="text-blue-600">{score}</span>
+        <span className="text-gray-400">/</span>
+        <span className="text-purple-600">{total}</span>
+      </div>
+      
+      {/* Percentage Responsive */}
+      <div className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-600 mb-6 sm:mb-8">
+        {percentage}% de aciertos
       </div>
 
-      {/* Title */}
-      <h1 className="text-4xl font-bold text-gray-800 mb-2">Quiz Completado</h1>
-      <p className="text-gray-600 mb-8">Aquí están tus resultados</p>
-
-      {/* Score Circle */}
-      <div className="relative w-48 h-48 mx-auto mb-8">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-5xl font-bold text-gray-800">
-              {score}<span className="text-2xl text-gray-400">/{total}</span>
-            </div>
-            <div className="text-xl font-semibold text-gray-600">{percentage}%</div>
-          </div>
-        </div>
-        <svg className="w-full h-full transform -rotate-90">
-          <circle
-            cx="96"
-            cy="96"
-            r="88"
-            stroke="url(#gradient)"
-            strokeWidth="16"
-            fill="none"
-            strokeDasharray={`${(percentage / 100) * 552.92} 552.92`}
-            className="transition-all duration-1000"
-          />
-          <defs>
-            <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#667eea" />
-              <stop offset="100%" stopColor="#764ba2" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
-
-      {/* Message */}
-      <div className="mb-8">
-        <p className="text-xl font-semibold text-gray-800 mb-4">{getMessage()}</p>
-        <div className={`inline-block px-6 py-2 rounded-full font-bold ${
+      {/* Message Responsive */}
+      <div className="mb-6 sm:mb-8">
+        <p className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 mb-3 sm:mb-4">
+          {getMessage()}
+        </p>
+        <div className={`inline-block px-4 sm:px-6 py-1.5 sm:py-2 rounded-full font-bold text-xs sm:text-sm ${
           percentage >= 70 
             ? 'bg-linear-to-r from-green-400 to-blue-500 text-white'
             : 'bg-linear-to-r from-yellow-400 to-orange-500 text-white'
@@ -88,35 +61,31 @@ export default function ScoreScreen({ score, total, onRestart }: ScoreScreenProp
         </div>
       </div>
 
-      {/* Actions */}
-      <div className="space-y-4">
-        <Button onClick={onRestart} variant="primary" fullWidth>
-          <div className="flex items-center justify-center gap-2">
-            <FaRedo />
-            Jugar Nuevamente
-          </div>
-        </Button>
+      {/* Actions Responsive */}
+      <div className="space-y-3 sm:space-y-4">
+        <button
+          onClick={onRestart}
+          className="w-full py-2.5 sm:py-3 px-4 text-sm sm:text-base font-bold rounded-lg sm:rounded-xl transition-all duration-300 hover:opacity-90 flex items-center justify-center gap-2"
+          style={{
+            background: 'linear-gradient(to right, var(--color-blue-500), var(--color-purple-600))',
+            color: 'white'
+          }}
+        >
+          <FaRedo className="text-xs sm:text-sm" />
+          Jugar Nuevamente
+        </button>
 
-        <Button onClick={shareScore} variant="success" fullWidth>
-          <div className="flex items-center justify-center gap-2">
-            <FaShareAlt />
-            Compartir Resultado
-          </div>
-        </Button>
-
-        <Link href="/" className="block">
-          <Button variant="secondary" fullWidth>
-            Volver al Inicio
-          </Button>
+        <Link 
+          href="/"
+          className="block w-full py-2.5 sm:py-3 px-4 text-sm sm:text-base font-bold rounded-lg sm:rounded-xl transition-all duration-300 hover:opacity-90 items-center justify-center gap-2"
+          style={{
+            background: 'var(--color-gray-100)',
+            color: 'var(--color-gray-800)',
+            border: '1px solid var(--color-gray-300)'
+          }}
+        >
+          Volver al Inicio
         </Link>
-      </div>
-
-      {/* Tips */}
-      <div className="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-200">
-        <h3 className="font-bold text-blue-800 mb-2">💡 Consejo para Estudiar</h3>
-        <p className="text-sm text-gray-700">
-          Revisa las flashcards y practica con los escenarios. ¡La constancia es clave para aprender!
-        </p>
       </div>
     </div>
   );
