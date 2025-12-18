@@ -1,7 +1,7 @@
 interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
-  variant?: 'primary' | 'secondary' | 'danger' | 'outline';
+  variant?: 'primary' | 'secondary' | 'danger' | 'outline'| 'success';
   fullWidth?: boolean;
   className?: string;
 }
@@ -19,7 +19,8 @@ export default function Button({
     primary: "gradient-primary text-white hover:opacity-90",
     secondary: "gradient-secondary text-white hover:opacity-90", 
     danger: "gradient-danger text-white hover:opacity-90",
-    outline: "border-2 border-gray-300 text-gray-700 hover:border-gray-400 hover:bg-gray-50"
+    outline: "border-2 border-gray-300 text-gray-700 hover:border-gray-400 hover:bg-gray-50",
+    success: "bg-green-500 text-white hover:bg-green-600" 
   };
 
   return (
